@@ -1,1 +1,1 @@
-Android remote GUI for transmission-daemon
+Android remote GUI for [Transmission BitTorrent client](https://www.transmissionbt.com)
