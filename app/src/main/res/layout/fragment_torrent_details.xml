@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.gridlayout.widget.GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/horizontal_edge_padding"
+        android:layout_marginRight="@dimen/horizontal_edge_padding"
+        android:paddingTop="@dimen/vertical_edge_padding"
+        android:paddingBottom="@dimen/vertical_edge_padding"
+        app:columnCount="2">
+
+        <TextView
+            android:text="@string/activity"
+            android:textStyle="bold"
+            app:layout_columnSpan="2" />
+
+        <TextView
+            style="@style/TextViewItemNameTorrentDetails"
+            android:text="@string/completed"
+            app:layout_columnWeight="3" />
+
+        <TextView
+            android:id="@+id/tv_completed_torrent_details"
+            style="@style/TextViewItemTorrentDetails"
+            app:layout_columnWeight="5" />
+
+        <TextView
+            style="@style/TextViewItemNameTorrentDetails"
+            android:text="@string/uploaded"
+            app:layout_columnWeight="3" />
+
+        <TextView
+            android:id="@+id/tv_uploaded_torrent_details"
+            style="@style/TextViewItemTorrentDetails"
+            app:layout_columnWeight="5" />
+
+        <TextView
+            style="@style/TextViewItemNameTorrentDetails"
+            android:text="@string/download_speed"
+            app:layout_columnWeight="3" />
+
+        <TextView
+            android:id="@+id/tv_download_speed_torrent_details"
+            style="@style/TextViewItemTorrentDetails"
+            app:layout_columnWeight="5" />
+
+        <TextView
+            style="@style/TextViewItemNameTorrentDetails"
+            android:text="@string/upload_speed"
+            app:layout_columnWeight="3" />
+
+        <TextView
+            android:id="@+id/tv_upload_speed_torrent_details"
+            style="@style/TextViewItemTorrentDetails"
+            app:layout_columnWeight="5" />
+
+        <TextView
+            style="@style/TextViewItemNameTorrentDetails"
+            android:text="@string/eta"
+            app:layout_columnWeight="3" />
+
+        <TextView
+            android:id="@+id/tv_eta_torrent_details"
+            style="@style/TextViewItemTorrentDetails"
+            app:layout_columnWeight="5" />
+
+        <TextView
+            style="@style/TextViewItemNameTorrentDetails"
+            android:text="@string/last_activity"
+            app:layout_columnWeight="3" />
+
+        <TextView
+            android:id="@+id/tv_last_activity_torrent_details"
+            style="@style/TextViewItemTorrentDetails"
+            app:layout_columnWeight="5" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/linear_layout_vertical_spacing_double"
+            android:text="@string/information"
+            android:textStyle="bold"
+            app:layout_columnSpan="2" />
+
+        <TextView
+            style="@style/TextViewItemNameTorrentDetails"
+            android:text="@string/total_size"
+            app:layout_columnWeight="3" />
+
+        <TextView
+            android:id="@+id/tv_total_size_torrent_details"
+            style="@style/TextViewItemTorrentDetails"
+            app:layout_columnWeight="5" />
+
+        <TextView
+            style="@style/TextViewItemNameTorrentDetails"
+            android:text="@string/location"
+            app:layout_columnWeight="3" />
+
+        <TextView
+            android:id="@+id/tv_location_torrent_details"
+            style="@style/TextViewItemTorrentDetails"
+            app:layout_columnWeight="5" />
+
+        <TextView
+            style="@style/TextViewItemNameTorrentDetails"
+            android:text="@string/creator"
+            app:layout_columnWeight="3" />
+
+        <TextView
+            android:id="@+id/tv_creator_torrent_details"
+            style="@style/TextViewItemTorrentDetails"
+            app:layout_columnWeight="5" />
+
+        <TextView
+            style="@style/TextViewItemNameTorrentDetails"
+            android:text="@string/date_created"
+            app:layout_columnWeight="3" />
+
+        <TextView
+            android:id="@+id/tv_date_created_torrent_details"
+            style="@style/TextViewItemTorrentDetails"
+            app:layout_columnWeight="5" />
+
+        <TextView
+            style="@style/TextViewItemNameTorrentDetails"
+            android:text="@string/comment"
+            app:layout_columnWeight="3" />
+
+        <TextView
+            android:id="@+id/tv_comment_torrent_details"
+            style="@style/TextViewItemTorrentDetails"
+            android:autoLink="web"
+            android:textIsSelectable="true"
+            app:layout_columnWeight="5" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/linear_layout_vertical_spacing_double"
+            android:text="@string/dates"
+            android:textStyle="bold"
+            app:layout_columnSpan="2" />
+
+        <TextView
+            style="@style/TextViewItemNameTorrentDetails"
+            android:text="@string/added_date"
+            app:layout_columnWeight="3" />
+
+        <TextView
+            android:id="@+id/tv_added_date_torrent_details"
+            style="@style/TextViewItemTorrentDetails"
+            android:autoLink="web"
+            android:textIsSelectable="true"
+            app:layout_columnWeight="5" />
+
+        <TextView
+            style="@style/TextViewItemNameTorrentDetails"
+            android:text="@string/done_date"
+            app:layout_columnWeight="3" />
+
+        <TextView
+            android:id="@+id/tv_done_date_torrent_details"
+            style="@style/TextViewItemTorrentDetails"
+            android:autoLink="web"
+            android:textIsSelectable="true"
+            app:layout_columnWeight="5" />
+
+
+
+    </androidx.gridlayout.widget.GridLayout>
+
+
+</ScrollView>
