@@ -8,7 +8,7 @@
     android:paddingEnd="8dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/selectableItemBackground">
+    android:background="@drawable/selector_list_item_background">
 
     <TextView
         android:id="@+id/tv_server_name"

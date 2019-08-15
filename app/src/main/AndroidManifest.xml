@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="com.github.noctwm.transmissionrpc.App"
+        android:name=".transmissionrpc.App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,6 +16,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="m">
+        <activity android:name=".transmissionrpc.ui.server.ManageServersActivity"></activity>
         <activity android:name=".transmissionrpc.ui.server.EditServerActivity" />
         <activity
             android:name=".transmissionrpc.ui.torrentdetails.DetailsActivity"

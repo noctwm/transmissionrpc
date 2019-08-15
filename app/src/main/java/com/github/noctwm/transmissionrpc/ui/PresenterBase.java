@@ -16,7 +16,6 @@ public abstract class PresenterBase<T> implements BaseContract.Presenter<T> {
 
     @Override
     public void destroy() {
-
     }
 
     protected T getView() {

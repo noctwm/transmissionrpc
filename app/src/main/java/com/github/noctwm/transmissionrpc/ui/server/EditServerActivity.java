@@ -99,9 +99,13 @@ public class EditServerActivity extends AppCompatActivity implements EditServerC
         etHost.setText(server.getHost());
         etPort.setText(String.valueOf(server.getPort()));
         etRpcPath.setText(server.getRpcPath());
-        cbAuthorize.setChecked(server.isUseAuthentication());
-        etLogin.setEnabled(server.isUseAuthentication());
-        etPassword.setEnabled(server.isUseAuthentication());
+        if (server.isUseAuthentication()) {
+            cbAuthorize.setChecked(true);
+            etLogin.setEnabled(true);
+            etLogin.setText(server.getLogin());
+            etPassword.setEnabled(true);
+            etPassword.setText(server.getPassword());
+        }
     }
 
     @Override
@@ -166,40 +170,7 @@ public class EditServerActivity extends AppCompatActivity implements EditServerC
         etRpcPath.setError(getResources().getString(R.string.error_empty_field));
     }
 
-    /*@Override
-    public String getServerName() {
-        return etServerName.getText().toString().trim();
-    }
 
-    @Override
-    public String getHost() {
-        return etHost.getText().toString().trim();
-    }
-
-    @Override
-    public int getPort() {
-        return Integer.parseInt(etPort.getText().toString().trim());
-    }
-
-    @Override
-    public String getRpcPath() {
-        return etRpcPath.getText().toString().trim();
-    }
-
-    @Override
-    public boolean isUseAuthentication() {
-        return cbAuthorize.isChecked();
-    }
-
-    @Override
-    public String getLogin() {
-        return etLogin.getText().toString().trim();
-    }
-
-    @Override
-    public String getPassword() {
-        return etPassword.getText().toString().trim();
-    }*/
 
     @Override
     public void finishView() {

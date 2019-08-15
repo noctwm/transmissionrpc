@@ -8,7 +8,7 @@ import java.util.List;
 
 interface MainContract {
 
-    interface MainView extends BaseContract.MvpView {
+    interface MainView extends BaseContract.BaseView {
 
         void updateTorrentsList(List<Torrent> torrents);
 
@@ -18,9 +18,15 @@ interface MainContract {
 
         void startAddServerActivity(Server server);
 
+        void startManageServersActivity();
+
         void setServerName(String serverName);
 
+        void clearServerName();
+
         void setServerSpeed(long downloadSpeed, long uploadSpeed, boolean visible);
+
+        void setActiveServer(Server server);
 
         void showError(String error);
     }
@@ -30,6 +36,12 @@ interface MainContract {
         void listItemTorrentsClicked(long torrentId);
 
         void listItemServersClicked(Server server);
+
+        void btAddServerClicked();
+
+        void btManageServersClicked();
+
+        void serversListVisible();
 
     }
 }

@@ -5,7 +5,7 @@ import com.github.noctwm.transmissionrpc.ui.BaseContract;
 
 public interface EditServerContract {
 
-    interface EditServerView extends BaseContract.MvpView {
+    interface EditServerView extends BaseContract.BaseView {
 
         String getServerId();
 

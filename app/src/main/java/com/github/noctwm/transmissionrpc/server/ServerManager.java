@@ -76,12 +76,23 @@ public class ServerManager {
         if (activeServer == null) {
             setActiveServer(server);
         }
+        if (server.equals(activeServer)) {
+            setActiveServer(server);
+        }
     }
 
-    public void deleteServer(Server server) {
-        servers.remove(server);
+    public void delete(List<Server> deleteList) {
+        servers.removeAll(deleteList);
         for (int i = 0; i < servers.size(); i++) {
             servers.get(i).setPositionInList(i);
+        }
+        if (deleteList.contains(activeServer)) {
+            if (servers.size() > 0) {
+                setActiveServer(servers.get(0));
+            } else {
+                deleteActiveServer();
+            }
+            fireActiveServerChangedEvent();
         }
         saveServers();
     }
@@ -151,6 +162,14 @@ public class ServerManager {
         if (activeServer == null && servers.size() > 0) {
             setActiveServer(servers.get(0));
         }
+    }
+
+    private void deleteActiveServer() {
+        App.get().getSharedPreferences(ACTIVE_SERVER_FILE_NAME, Context.MODE_PRIVATE).
+                edit()
+                .clear()
+                .apply();
+        activeServer = null;
     }
 
     public interface OnActiveServerChangedListener {

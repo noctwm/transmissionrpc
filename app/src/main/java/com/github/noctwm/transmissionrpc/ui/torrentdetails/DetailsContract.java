@@ -5,7 +5,7 @@ import com.github.noctwm.transmissionrpc.ui.BaseContract;
 
 public interface DetailsContract {
 
-    interface DetailsView extends BaseContract.MvpView {
+    interface DetailsView extends BaseContract.BaseView {
 
         void update(Torrent torrent);
 

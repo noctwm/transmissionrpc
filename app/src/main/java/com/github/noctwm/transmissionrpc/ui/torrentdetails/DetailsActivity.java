@@ -3,6 +3,7 @@ package com.github.noctwm.transmissionrpc.ui.torrentdetails;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -43,7 +44,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
         tabs.setupWithViewPager(viewPager);
 
         Intent intent = getIntent();
-        torrentId = intent.getLongExtra(MainActivity.EXTRA_MESSAGE_TORRENT_ID, 0);
+        torrentId = intent.getLongExtra(MainActivity.EXTRA_TORRENT_ID, 0);
         attachPresenter();
     }
 
@@ -108,5 +109,12 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
         presenter.attachView(this);
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

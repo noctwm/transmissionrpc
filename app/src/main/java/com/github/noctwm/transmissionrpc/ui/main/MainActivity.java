@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.github.noctwm.transmissionrpc.server.Server;
 import com.github.noctwm.transmissionrpc.ui.server.EditServerActivity;
+import com.github.noctwm.transmissionrpc.ui.server.ManageServersActivity;
 import com.github.noctwm.transmissionrpc.ui.torrentdetails.DetailsActivity;
 import com.github.noctwm.transmissionrpc.utils.Utils;
 import com.google.android.material.navigation.NavigationView;
@@ -21,7 +22,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -36,8 +36,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements MainContract.MainView {
 
-    public static final String EXTRA_MESSAGE_TORRENT_ID = "torrent_id";
-    public static final String EXTRA_MESSAGE_SERVER_ID = "server_id";
+    public static final String EXTRA_TORRENT_ID = "com.github.noctwm.transmissionrpc.TORRENT_ID";
+    public static final String EXTRA_MESSAGE_SERVER_ID = "com.github.noctwm.transmissionrpc.SERVER_ID";
 
     private boolean isBtServersPressed = false;
 
@@ -65,6 +65,15 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
+        drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                if (isBtServersPressed) {
+                    presenter.serversListVisible();
+                }
+                super.onDrawerStateChanged(newState);
+            }
+        });
         toggle.syncState();
 
         llNavMenu = navigationView.findViewById(R.id.ll_nav_menu);
@@ -73,13 +82,10 @@ public class MainActivity extends AppCompatActivity
         lvServers = navigationView.findViewById(R.id.lv_servers_main);
         serversAdapter = new ServersAdapter(this, new ArrayList<>());
         lvServers.setAdapter(serversAdapter);
-        lvServers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                drawer.closeDrawer(GravityCompat.START);
-                Server server = (Server) serversAdapter.getItem(position);
-                presenter.listItemServersClicked(server);
-            }
+        lvServers.setOnItemClickListener((parent, view, position, id) -> {
+            drawer.closeDrawer(GravityCompat.START);
+            Server server = (Server) serversAdapter.getItem(position);
+            presenter.listItemServersClicked(server);
         });
 
         Button btSettings = navigationView.findViewById(R.id.bt_settings_main);
@@ -97,8 +103,7 @@ public class MainActivity extends AppCompatActivity
                 btServers.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_up, 0);
                 llNavServers.setVisibility(View.VISIBLE);
                 llNavMenu.setVisibility(View.GONE);
-                lvServers.requestFocusFromTouch();
-                lvServers.setSelection(0);
+                presenter.serversListVisible();
             } else {
                 btServers.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
                 llNavServers.setVisibility(View.GONE);
@@ -108,20 +113,30 @@ public class MainActivity extends AppCompatActivity
 
         Button btAddServer = navigationView.findViewById(R.id.bt_add_server_main);
         btAddServer.setOnClickListener(v -> {
-            startAddServerActivity(new Server());
             drawer.closeDrawer(GravityCompat.START);
+            presenter.btAddServerClicked();
+        });
+
+        Button btManageServers = navigationView.findViewById(R.id.bt_manage_servers_main);
+        btManageServers.setOnClickListener(v -> {
+            drawer.closeDrawer(GravityCompat.START);
+            presenter.btManageServersClicked();
         });
 
         lvMain = findViewById(R.id.lv_torrents_main);
         torrentAdapter = new TorrentAdapter(this, new ArrayList<>());
         lvMain.setAdapter(torrentAdapter);
-        lvMain.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         lvMain.setVerticalScrollBarEnabled(false);
         lvMain.setOnItemClickListener((parent, view, position, id) -> presenter.listItemTorrentsClicked(id));
 
         attachPresenter();
     }
 
+    @Override
+    public void setActiveServer(Server server) {
+        int position = serversAdapter.getItemPosition(server);
+        lvServers.setSelection(position);
+    }
 
     //tmp
     @Override
@@ -143,8 +158,22 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void setServerName(String serverName) {
+        /*if (!btServers.isEnabled()) {
+            btServers.setEnabled(true);
+        }*/
         toolbar.setTitle(serverName);
         btServers.setText(serverName);
+    }
+
+    @Override
+    public void clearServerName() {
+        toolbar.setTitle(getResources().getString(R.string.app_name));
+        btServers.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
+        btServers.setText("");
+        //btServers.setEnabled(false);
+        isBtServersPressed = false;
+        llNavServers.setVisibility(View.GONE);
+        llNavMenu.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -163,7 +192,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void startDetailsActivity(long torrentId) {
         Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra(EXTRA_MESSAGE_TORRENT_ID, torrentId);
+        intent.putExtra(EXTRA_TORRENT_ID, torrentId);
         startActivity(intent);
     }
 
@@ -174,6 +203,11 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    @Override
+    public void startManageServersActivity() {
+        Intent intent = new Intent(this, ManageServersActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public void onBackPressed() {
@@ -187,19 +221,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
         }
@@ -221,16 +250,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
         if (isChangingConfigurations()) {
             presenter.detachView();
         } else {
             presenter.destroy();
         }
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+
         super.onDestroy();
     }
 

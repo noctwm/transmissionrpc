@@ -1,15 +1,17 @@
 package com.github.noctwm.transmissionrpc.ui.main;
 
-import com.github.noctwm.transmissionrpc.rpc.model.Torrent;
+import com.github.noctwm.R;
+import com.github.noctwm.transmissionrpc.App;
 import com.github.noctwm.transmissionrpc.rpc.RequestHelper;
 import com.github.noctwm.transmissionrpc.rpc.TransmissionService;
+import com.github.noctwm.transmissionrpc.rpc.model.Torrent;
 import com.github.noctwm.transmissionrpc.server.Server;
 import com.github.noctwm.transmissionrpc.server.ServerManager;
 import com.github.noctwm.transmissionrpc.ui.PresenterBase;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -21,8 +23,6 @@ public class MainPresenter extends PresenterBase<MainContract.MainView> implemen
 
     private CompositeDisposable compositeDisposable;
     private Disposable periodicUpdate;
-
-    private AtomicBoolean isUpdatePaused = new AtomicBoolean(false);
 
     private List<Torrent> cachedTorrents;
 
@@ -36,11 +36,11 @@ public class MainPresenter extends PresenterBase<MainContract.MainView> implemen
         getView().updateServersList(ServerManager.getInstance().getAll());
 
         Server activeServer = ServerManager.getInstance().getActiveServer();
-        isUpdatePaused.set(false);
 
         if (activeServer != null) {
             getView().setServerName(activeServer.getName());
-            if (periodicUpdate == null || periodicUpdate.isDisposed() ) {
+            getView().setActiveServer(activeServer);
+            if (periodicUpdate == null || periodicUpdate.isDisposed()) {
                 startPeriodicUpdate();
             } else {
                 if (cachedTorrents != null) {
@@ -50,7 +50,7 @@ public class MainPresenter extends PresenterBase<MainContract.MainView> implemen
             }
 
         } else {
-            //todo show "add server" message, if servers list empty
+            getView().clearServerName();
         }
 
 
@@ -58,7 +58,7 @@ public class MainPresenter extends PresenterBase<MainContract.MainView> implemen
 
     @Override
     public void viewIsPaused() {
-        isUpdatePaused.set(true);
+        //isUpdatePaused.set(true);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class MainPresenter extends PresenterBase<MainContract.MainView> implemen
 
     @Override
     public void destroy() {
-        compositeDisposable.dispose();
+        compositeDisposable.clear();
         super.destroy();
     }
 
@@ -80,10 +80,26 @@ public class MainPresenter extends PresenterBase<MainContract.MainView> implemen
     @Override
     public void listItemServersClicked(Server server) {
         ServerManager.getInstance().setActiveServer(server);
+        //activeServer = ServerManager.getInstance().getActiveServer();
         getView().setServerName(server.getName());
+        getView().setActiveServer(server);
         compositeDisposable.clear();
         startPeriodicUpdate();
+    }
 
+    @Override
+    public void btAddServerClicked() {
+        getView().startAddServerActivity(new Server());
+    }
+
+    @Override
+    public void btManageServersClicked() {
+        getView().startManageServersActivity();
+    }
+
+    @Override
+    public void serversListVisible() {
+        getView().setActiveServer(ServerManager.getInstance().getActiveServer());
     }
 
     private void startPeriodicUpdate() {
@@ -91,9 +107,7 @@ public class MainPresenter extends PresenterBase<MainContract.MainView> implemen
 
         if (TransmissionService.getApi() != null) {
             periodicUpdate = Observable.interval(0, 2, TimeUnit.SECONDS, Schedulers.io())
-                    .filter(aLong -> !isUpdatePaused.get())
                     .flatMap(r -> TransmissionService.getApi().getTorrents(RequestHelper.getTorrentInfo()))
-                    //.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
 
@@ -104,7 +118,11 @@ public class MainPresenter extends PresenterBase<MainContract.MainView> implemen
                                 }
                                 cachedTorrents = torrents;
                             },
-                            throwable -> getView().showError("Connection error")
+                            throwable -> {
+                                getView().showError("Connection error");
+                                getView().updateTorrentsList(new ArrayList<>());
+                                getView().setServerSpeed(0,0, false);
+                            }
                     );
             compositeDisposable.add(periodicUpdate);
         }

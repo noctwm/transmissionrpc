@@ -2,7 +2,7 @@ package com.github.noctwm.transmissionrpc.ui;
 
 public interface BaseContract {
 
-    interface MvpView {
+    interface BaseView {
     }
 
     interface Presenter<T> {

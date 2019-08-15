@@ -93,5 +93,15 @@
     <string name="error_empty_field">Поле не может быть пустым</string>
     <string name="arrow_down">▼</string>
     <string name="arrow_up">▲</string>
+    <string name="title_servers">Серверы</string>
+    <string name="delete">Удалить</string>
+    <string name="select_all">Выбрать все</string>
+
+    <plurals name="remove_servers_message">
+        <item quantity="one">Удалить %d выбранный сервер?</item>
+        <item quantity="few">Удалить %d выбранных сервера?</item>
+        <item quantity="many">Удалить %d выбранных серверов?</item>
+        <item quantity="other">Удалить %d выбранных серверов?</item>
+    </plurals>
 
 </resources>
