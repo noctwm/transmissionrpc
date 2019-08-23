@@ -2,8 +2,8 @@ package com.github.noctwm.transmissionrpc;
 
 import android.app.Application;
 
-import com.github.noctwm.transmissionrpc.rpc.TransmissionService;
-import com.github.noctwm.transmissionrpc.server.ServerManager;
+import com.github.noctwm.transmissionrpc.app.rpc.api.TransmissionService;
+import com.github.noctwm.transmissionrpc.app.server.ServerManager;
 import com.google.gson.Gson;
 
 public class App extends Application {

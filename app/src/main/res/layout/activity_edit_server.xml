@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".transmissionrpc.ui.server.EditServerActivity"
+    tools:context=".transmissionrpc.ui.activity.server.EditServerActivity"
 
     >
 

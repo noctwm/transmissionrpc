@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".transmissionrpc.ui.server.ManageServersActivity">
+    tools:context=".transmissionrpc.ui.activity.server.ManageServersActivity">
 
     <ListView
         android:id="@+id/lv_manage_servers"
